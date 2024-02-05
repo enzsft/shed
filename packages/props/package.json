@@ -1,7 +1,7 @@
 {
   "name": "@enzsft/props",
   "description": "Utilities for constructing props.",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "build": "scripts build-library",
