@@ -1,0 +1,13 @@
+{
+  "extends": "./configs/tsconfig.json",
+  "include": [
+    "next-env.d.ts",
+    "**/*.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "./jest.setup.ts",
+    "configs/jest.config.js",
+    "configs/jest.config.js"
+  ],
+  "exclude": ["node_modules"]
+}

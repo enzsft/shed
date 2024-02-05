@@ -1,0 +1,74 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
+    "plugin:jest/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:jest-dom/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:testing-library/react"
+  ],
+  "env": {
+    "browser": true,
+    "jest": true,
+    "node": true
+  },
+  "globals": {
+    "console": "readonly",
+    "document": "readonly",
+    "fetch": "readonly",
+    "module": "writable",
+    "window": "readonly"
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "sourceType": "module",
+    "jsx": true
+  },
+  "plugins": [
+    "prettier",
+    "@typescript-eslint",
+    "import",
+    "jest",
+    "jsx-a11y",
+    "jest-dom",
+    "testing-library",
+    "react",
+    "react-hooks"
+  ],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx", ".json", ".es6", ".mjs", ".cjs"]
+      }
+    },
+    "react": {
+      "version": "detect"
+    },
+    "next": {
+      "rootDir": "projects/*"
+    }
+  },
+  "rules": {
+    "prettier/prettier": "error",
+    "no-var": "error",
+    "@typescript-eslint/no-unused-vars": "error",
+    "no-undef": "off",
+    "no-unused-vars": "off",
+    "import/named": "off",
+    "import/no-unresolved": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "react/react-in-jsx-scope": "off",
+    "@next/next/no-img-element": "off"
+  }
+}

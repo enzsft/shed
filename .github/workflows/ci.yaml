@@ -1,0 +1,36 @@
+name: CI
+
+on: pull_request
+
+permissions:
+  contents: write
+  packages: write
+  issues: write
+  pull-requests: write
+  pages: write
+  id-token: write
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialise
+        uses: ./.github/actions/initialise
+
+      - name: Audit
+        run: pnpm audit --prod --audit-level low
+
+      - name: Build
+        run: pnpm build
+
+      - name: Test
+        run: pnpm test
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck

@@ -1,0 +1,20 @@
+{
+  "exclude": [".*\\.test.tsx?$"],
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "tsx": false,
+      "decorators": true,
+      "dynamicImport": true
+    },
+    "transform": {
+      "react": {
+        "runtime": "automatic"
+      }
+    }
+  },
+  "sourceMaps": true,
+  "module": {
+    "type": "es6"
+  }
+}

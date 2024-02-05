@@ -1,0 +1,9 @@
+{
+  "name": "@enzsft/scripts",
+  "description": "Utility scripts for this repositories packages.",
+  "version": "1.0.0",
+  "private": true,
+  "bin": {
+    "scripts": "scripts.sh"
+  }
+}

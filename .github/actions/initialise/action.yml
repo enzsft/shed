@@ -1,0 +1,33 @@
+name: Initialise
+
+description: Initialise repository
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version-file: .nvmrc
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8.9.0
+        run_install: false
+
+    - name: Get pnpm store directory
+      id: pnpm-cache-directory
+      shell: bash
+      run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+    - name: Setup pnpm cache
+      id: pnpm-cache
+      uses: actions/cache@v3
+      with:
+        path: ${{ steps.pnpm-cache-directory.outputs.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('./pnpm-lock.yaml') }}
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install
