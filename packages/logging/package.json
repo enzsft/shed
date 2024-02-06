@@ -1,7 +1,7 @@
 {
   "name": "@enzsft/logging",
   "description": "Isomorphic logging library, suitable for use in both Node.js and the browser.",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "build": "scripts build-library",
