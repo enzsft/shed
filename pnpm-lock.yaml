@@ -37,6 +37,9 @@ importers:
       "@testing-library/user-event":
         specifier: ^14.5.2
         version: 14.5.2(@testing-library/dom@9.3.4)
+      "@types/deepmerge":
+        specifier: ^2.2.0
+        version: 2.2.0
       "@types/jest":
         specifier: ^29.5.12
         version: 29.5.12
@@ -52,6 +55,9 @@ importers:
       "@types/react-dom":
         specifier: ^18.2.18
         version: 18.2.18
+      "@types/uuid":
+        specifier: ^9.0.8
+        version: 9.0.8
       "@typescript-eslint/eslint-plugin":
         specifier: ^6.21.0
         version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.56.0)(typescript@5.3.3)
@@ -123,6 +129,20 @@ importers:
         version: 5.3.3
 
   packages/class-name: {}
+
+  packages/environment: {}
+
+  packages/logging:
+    dependencies:
+      "@opentelemetry/api":
+        specifier: ^1.7.0
+        version: 1.7.0
+      deepmerge:
+        specifier: ^4.3.1
+        version: 4.3.1
+      uuid:
+        specifier: ^9.0.1
+        version: 9.0.1
 
   packages/props: {}
 
@@ -1310,6 +1330,12 @@ packages:
       fastq: 1.17.1
     dev: true
 
+  /@opentelemetry/api@1.7.0:
+    resolution:
+      { integrity: sha512-AdY5wvN0P2vXBi3b29hxZgSFvdhdxPB9+f0B6s//P9Q8nibRWeA3cHm8UmLpio9ABigkVHJ5NMPk+Mz8VCCyrw== }
+    engines: { node: ">=8.0.0" }
+    dev: false
+
   /@pkgr/core@0.1.1:
     resolution:
       { integrity: sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA== }
@@ -1642,6 +1668,14 @@ packages:
       "@types/responselike": 1.0.3
     dev: true
 
+  /@types/deepmerge@2.2.0:
+    resolution:
+      { integrity: sha512-FEQYDHh6+Q+QXKSrIY46m+/lAmAj/bk4KpLaam+hArmzaVpMBHLcfwOH2Q2UOkWM7XsdY9PmZpGyPAjh/JRGhQ== }
+    deprecated: This is a stub types definition. deepmerge provides its own type definitions, so you do not need this installed.
+    dependencies:
+      deepmerge: 4.3.1
+    dev: true
+
   /@types/graceful-fs@4.1.9:
     resolution:
       { integrity: sha512-olP3sd1qOEe5dXTSaFvQG+02VdRXcdytWLAZsAq1PecU8uqQAhkrnbli7DagjtXKW/Bl7YJbUsa8MPcuc8LHEQ== }
@@ -1783,6 +1817,11 @@ packages:
   /@types/tough-cookie@4.0.5:
     resolution:
       { integrity: sha512-/Ad8+nIOV7Rl++6f1BdKxFSMgmoqEoYbHRpPcx3JEfv8VRsQe9Z4mCXeJBzxs7mbHY/XOZZuXlRNfhpVPbs6ZA== }
+    dev: true
+
+  /@types/uuid@9.0.8:
+    resolution:
+      { integrity: sha512-jg+97EGIcY9AGHJJRaaPVgetKDsrTgbRjQ5Msgjh/DQKEFl0DtyRr/VCOyD1T2R1MNeWPK/u7JoGhlDZnKBAfA== }
     dev: true
 
   /@types/yargs-parser@21.0.3:
@@ -3049,7 +3088,6 @@ packages:
     resolution:
       { integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A== }
     engines: { node: ">=0.10.0" }
-    dev: true
 
   /defaults@1.0.4:
     resolution:
@@ -7645,6 +7683,12 @@ packages:
     resolution:
       { integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw== }
     dev: true
+
+  /uuid@9.0.1:
+    resolution:
+      { integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA== }
+    hasBin: true
+    dev: false
 
   /v8-to-istanbul@9.2.0:
     resolution:

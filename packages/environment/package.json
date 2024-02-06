@@ -1,0 +1,25 @@
+{
+  "name": "@enzsft/environment",
+  "description": "Utilities for interacting with environment variables.",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "scripts build-library",
+    "test": "scripts test",
+    "test:ci": "scripts test --coverage"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/cjs/index.js"
+    }
+  }
+}

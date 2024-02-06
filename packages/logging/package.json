@@ -1,0 +1,36 @@
+{
+  "name": "@enzsft/logging",
+  "description": "Isomorphic logging library, suitable for use in both Node.js and the browser.",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "scripts build-library",
+    "test": "scripts test",
+    "test:ci": "scripts test --coverage"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.7.0",
+    "deepmerge": "^4.3.1",
+    "uuid": "^9.0.1"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/cjs/index.js"
+    },
+    "./opentelemetry": {
+      "types": "./dist/esm/opentelemetry.d.ts",
+      "import": "./dist/esm/opentelemetry.js",
+      "require": "./dist/cjs/opentelemetry.js",
+      "default": "./dist/cjs/opentelemetry.js"
+    }
+  }
+}
