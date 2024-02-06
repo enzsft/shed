@@ -1,0 +1,9 @@
+{
+  "extends": "../../configs/tsconfig.types.json",
+  "compilerOptions": {
+    "declarationDir": "./dist/esm",
+    "rootDir": "./src"
+  },
+  "include": ["./src/**/*.ts", "./src/**/*.tsx"],
+  "exclude": ["node_modules", "**/*.test.ts", "**/*.test.tsx"]
+}
