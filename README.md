@@ -8,10 +8,12 @@ A shed is where you store you tools right!
 
 ## Packages
 
-| Package                             | Description                                        |
-| ----------------------------------- | -------------------------------------------------- |
-| [`class-name`](packages/class-name) | Utilities to build well formatted className props. |
-| [`props`](packages/props)           | Utilities for constructing props.                  |
+| Package                               | Description                                                                   |
+| ------------------------------------- | ----------------------------------------------------------------------------- |
+| [`class-name`](packages/class-name)   | Utilities to build well formatted className props.                            |
+| [`environment`](packages/environment) | Utilities for interacting with environment variables.                         |
+| [`logging`](packages/logging)         | Isomorphic logging library, suitable for use in both Node.js and the browser. |
+| [`props`](packages/props)             | Utilities for constructing props.                                             |
 
 ## Contributing
 
