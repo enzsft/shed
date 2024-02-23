@@ -1,72 +1,71 @@
-const normalizedKeys: Record<string, string> = {};
+const normalisedKeys = new Map<string, string>();
 
-const normalizeKey = (key: string): string => {
-  // important we memoize this as it a substantial time saver when calling with
-  // the same collection of redacted keys
-  if (!normalizedKeys[key]) {
-    normalizedKeys[key] = key.toLowerCase().replace(/ /g, "").replace(/\./g, "").replace(/-/g, "").replace(/_/g, "");
+function normaliseKey(key: string): string {
+  let normalised = normalisedKeys.get(key);
+
+  if (normalised === undefined) {
+    normalised = key.toLowerCase().replace(/ /g, "").replace(/\./g, "").replace(/-/g, "").replace(/_/g, "");
+    normalisedKeys.set(key, normalised);
+    return normalised;
   }
 
-  return normalizedKeys[key];
-};
+  return normalised;
+}
+
+function notEmptyObject(obj: object): boolean {
+  return Object.prototype.toString.call(obj) === "[object Object]" && Object.keys(obj).length > 0;
+}
 
 export interface RedactOptions {
   keysToRedact: string[];
   redactionValue?: string;
 }
 
-export const redact = (object: Record<string, unknown>, options: RedactOptions): Record<string, unknown> => {
+export function redact(object: Record<string, unknown>, options: RedactOptions): Record<string, unknown> {
   if (!object) {
     return object;
   }
+
   if (options.keysToRedact.length === 0) {
     return object;
   }
 
-  const normalizedKeysToRedact = options.keysToRedact.map((key) => normalizeKey(key));
   const redactionValue = options.redactionValue ?? "<redacted>";
+  const normalisedKeysToRedact = options.keysToRedact.map(normaliseKey);
 
-  const result: Record<string, unknown> = {};
+  function innerRedact<T>(input: T): T {
+    switch (typeof input) {
+      case "string":
+      case "number":
+      case "boolean":
+      case "undefined":
+        return input;
 
-  const keys = Object.keys(object);
+      case "object": {
+        if (Array.isArray(input)) {
+          return input.map((item) => innerRedact(item as unknown)) as T;
+        } else if (input === null || input instanceof Date || input instanceof Set || input instanceof Map) {
+          return input;
+        } else if (notEmptyObject(input)) {
+          const result: Record<string, unknown> = {};
 
-  // for loop with continue statements is much faster than forEach with return statements
-  for (const key of keys) {
-    const value = object[key];
-    if (!value) {
-      result[key] = value;
+          for (const [key, value] of Object.entries(input as Record<string, unknown>)) {
+            if (value && normalisedKeysToRedact.includes(normaliseKey(key))) {
+              result[key] = redactionValue;
+            } else {
+              result[key] = innerRedact(value);
+            }
+          }
 
-      continue;
+          return result as T;
+        } else {
+          return input;
+        }
+      }
     }
 
-    if (normalizedKeysToRedact.includes(normalizeKey(key))) {
-      result[key] = redactionValue;
-
-      continue;
-    }
-
-    if (Array.isArray(value)) {
-      result[key] = value.map((item) =>
-        redact(item as Record<string, unknown>, {
-          keysToRedact: normalizedKeysToRedact,
-          redactionValue: options.redactionValue,
-        }),
-      );
-
-      continue;
-    }
-
-    if (typeof value === "object" && !(value instanceof Date)) {
-      result[key] = redact(value as Record<string, unknown>, {
-        keysToRedact: normalizedKeysToRedact,
-        redactionValue: options.redactionValue,
-      });
-
-      continue;
-    }
-
-    result[key] = value;
+    return innerRedact(input);
   }
 
-  return result;
-};
+  return innerRedact(object);
+}
