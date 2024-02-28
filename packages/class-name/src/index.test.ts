@@ -1,4 +1,4 @@
-import { classes, firstClasses } from ".";
+import { classes, firstClasses, getStyles } from ".";
 
 describe("classes", () => {
   it("should return a string of class names", () => {
@@ -6,6 +6,15 @@ describe("classes", () => {
     expect(classes(" foo ", " bar ")).toEqual("foo bar");
     expect(classes("foo", "bar hello   world")).toEqual("foo bar hello world");
     expect(classes("   ", "foo", " ", "bar", "")).toEqual("foo bar");
+    expect(
+      classes(
+        `new
+    line
+hello `,
+        "world ",
+        "   ",
+      ),
+    ).toEqual("new line hello world");
   });
 
   it("should ignore falsey values", () => {
@@ -37,5 +46,36 @@ describe("firstClasses", () => {
     const result = firstClasses(false, undefined, null);
 
     expect(result).toEqual("");
+  });
+});
+
+describe("getStyles", () => {
+  const styles = {
+    primary: "primary",
+    secondary: "secondary",
+    tertiary: {
+      disabled: "tertiary-disabled",
+      active: "tertiary-active",
+    },
+  };
+
+  it("should return enabled styles", () => {
+    expect(
+      getStyles(styles, {
+        primary: true,
+        secondary: false,
+        tertiary: {
+          active: true,
+        },
+      }),
+    ).toEqual("primary tertiary-active");
+  });
+
+  it("should return no styles when none enabled", () => {
+    expect(
+      getStyles(styles, {
+        primary: false,
+      }),
+    ).toEqual("");
   });
 });
