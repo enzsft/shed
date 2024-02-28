@@ -1,7 +1,7 @@
 {
   "name": "@enzsft/class-name",
   "description": "Utilities to build well formatted className props.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "build": "scripts build-library",
