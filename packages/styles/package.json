@@ -1,7 +1,7 @@
 {
   "name": "@enzsft/styles",
   "description": "Utilities to work with styles.",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "build": "scripts build-library",
