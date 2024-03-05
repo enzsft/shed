@@ -32,6 +32,7 @@ const object = {
   "first.nam.e": "John",
   "first name": "John",
   "fi rst name": "John",
+  empty: {},
 };
 
 it("should not redact anything", () => {
@@ -84,6 +85,7 @@ it("should should redact object", () => {
     "first.nam.e": "John",
     "first name": "John",
     "fi rst name": "John",
+    empty: {},
   });
 });
 
@@ -128,6 +130,7 @@ it("should normalise keys", () => {
     "first.nam.e": "<redacted>",
     "first name": "<redacted>",
     "fi rst name": "<redacted>",
+    empty: {},
   });
 });
 
@@ -164,6 +167,7 @@ it("should use provided redaction value", () => {
     "first.nam.e": "John",
     "first name": "John",
     "fi rst name": "John",
+    empty: {},
   });
 });
 

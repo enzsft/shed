@@ -4,10 +4,6 @@ export type PropValue = any;
 
 /**
  * Returns a new object without the excluded props.
- *
- * @param props The props to filter
- * @param propsToExclude The prop keys to exclude
- * @returns Refined props
  */
 export const excludeProps = <T extends Record<string, PropValue>, K extends keyof T>(props: T, propsToExclude: K[]) => {
   const result = { ...props };
@@ -21,10 +17,6 @@ export const excludeProps = <T extends Record<string, PropValue>, K extends keyo
 
 /**
  * Returns a new object with only the included props.
- *
- * @param props The props to filter
- * @param propsToInclude The prop keys to include
- * @returns Refined props
  */
 export const includeProps = <T extends Record<string, PropValue>, K extends keyof T>(props: T, propsToInclude: K[]) => {
   const result: Record<K, PropValue> = {} as Record<K, PropValue>;
