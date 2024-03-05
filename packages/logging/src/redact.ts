@@ -21,6 +21,9 @@ export interface RedactOptions {
   redactionValue?: string;
 }
 
+/**
+ * Redact sensitive information from an object.
+ */
 export function redact(object: Record<string, unknown>, options: RedactOptions): Record<string, unknown> {
   if (!object) {
     return object;
@@ -38,18 +41,19 @@ export function redact(object: Record<string, unknown>, options: RedactOptions):
       case "string":
       case "number":
       case "boolean":
-      case "undefined":
+      case "undefined": {
         return input;
-
-      case "object": {
+      }
+      case "object":
+      default: {
         if (Array.isArray(input)) {
           return input.map((item) => innerRedact(item as unknown)) as T;
         } else if (input === null || input instanceof Date || input instanceof Set || input instanceof Map) {
           return input;
-        } else if (notEmptyObject(input)) {
+        } else if (notEmptyObject(input as object)) {
           const result: Record<string, unknown> = {};
 
-          for (const [key, value] of Object.entries(input as Record<string, unknown>)) {
+          for (const [key, value] of Object.entries(input as object)) {
             if (value && normalisedKeysToRedact.includes(normaliseKey(key))) {
               result[key] = redactionValue;
             } else {
@@ -63,8 +67,6 @@ export function redact(object: Record<string, unknown>, options: RedactOptions):
         }
       }
     }
-
-    return innerRedact(input);
   }
 
   return innerRedact(object);

@@ -6,10 +6,6 @@ export type EnvironmentVariableResult<T> = T extends true ? string : string | un
 
 /**
  * Read an environment variable.
- *
- * @param name The name of the variable
- * @param options Optional options for reading the variable
- * @returns Refined props
  */
 export const readEnvironmentVariable = <T extends boolean>(
   name: string,

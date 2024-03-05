@@ -51,60 +51,36 @@ export interface TracingContext {
 export interface Logger {
   /**
    * Log a debug message
-   *
-   * @param payload the log payload
-   * @returns void
    */
   debug: (payload: LogPayload) => void;
   /**
    * Log an info message
-   *
-   * @param payload the log payload
-   * @returns void
    */
   info: (payload: LogPayload) => void;
   /**
    * Log a warning message
-   *
-   * @param payload the log payload
-   * @returns void
    */
   warn: (payload: LogPayload) => void;
   /**
    * Log an error message
-   *
-   * @param payload the log payload
-   * @returns void
    */
   error: (payload: LogPayload & ErrorLogPayload & LiteralErrorLogPayload) => void;
   /**
    * Add data to the logger
-   *
-   * @param data the data to add
-   * @returns void
    */
   withData: (data: LogData) => void;
   /**
    * Add tracing context to the logger
-   *
-   * @param tracingContext the tracing context to add
-   * @returns void
    */
   withTracingContext: (tracingContext: TracingContext) => void;
   /**
    * Add redactions to the logger
-   *
-   * @param options the redaction options
-   * @returns void
    */
   withRedactions: (options: RedactionOptions) => void;
 }
 
 /**
  * Create a new logger
- *
- * @param options the logger options
- * @returns the logger
  */
 export const createLogger = (options: LoggerOptions): Logger => {
   const baseLogData = {
