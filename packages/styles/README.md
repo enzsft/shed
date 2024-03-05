@@ -45,14 +45,14 @@ const styles = oclsx({
   three: "three",
 });
 
-oclsx({
+styles({
   one: true,
   two: false,
   three: true,
 });
 // one three
 
-oclsx({
+styles({
   three: true,
 });
 // three
