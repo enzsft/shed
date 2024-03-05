@@ -50,18 +50,18 @@ describe("fclsx", () => {
 });
 
 describe("oclsx", () => {
-  const styles = {
+  const styles = oclsx({
     primary: "primary",
     secondary: "secondary",
     tertiary: {
       disabled: "tertiary-disabled",
       active: "tertiary-active",
     },
-  };
+  });
 
   it("should return enabled styles", () => {
     expect(
-      oclsx(styles, {
+      styles({
         primary: true,
         secondary: false,
         tertiary: {
@@ -73,7 +73,7 @@ describe("oclsx", () => {
 
   it("should return no styles when none enabled", () => {
     expect(
-      oclsx(styles, {
+      styles({
         primary: false,
       }),
     ).toEqual("");
@@ -81,19 +81,16 @@ describe("oclsx", () => {
 
   it("should ignore invalid properties", () => {
     expect(
-      oclsx(
-        {
-          primary: "primary",
-          secondary: "secondary",
-          // @ts-expect-error
-          invalid: 123,
-        },
-        {
-          primary: true,
-          secondary: true,
-          invalid: true,
-        },
-      ),
+      oclsx({
+        primary: "primary",
+        secondary: "secondary",
+        // @ts-expect-error
+        invalid: 123,
+      })({
+        primary: true,
+        secondary: true,
+        invalid: true,
+      }),
     ).toEqual("primary secondary");
   });
 });
