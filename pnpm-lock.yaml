@@ -128,8 +128,6 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
 
-  packages/styles: {}
-
   packages/environment: {}
 
   packages/logging:
@@ -147,6 +145,8 @@ importers:
   packages/props: {}
 
   packages/scripts: {}
+
+  packages/styles: {}
 
 packages:
   /@aashutoshrathi/word-wrap@1.2.6:
