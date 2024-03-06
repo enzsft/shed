@@ -1,5 +1,11 @@
 # @enzsft/styles
 
+## 1.1.1
+
+### Patch Changes
+
+- 4ef1b00: Fix formatting of `fclsx`
+
 ## 1.1.0
 
 ### Minor Changes
