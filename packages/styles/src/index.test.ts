@@ -31,7 +31,7 @@ hello `,
 
 describe("fclsx", () => {
   it("should return styles based on first true condition", () => {
-    const result = fclsx(false, "bar", "default");
+    const result = fclsx(false, "bar ", "default");
 
     expect(result).toEqual("bar");
   });

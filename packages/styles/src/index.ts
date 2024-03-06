@@ -23,9 +23,6 @@ type NestedObjectOfBoolean<T> = {
 
 type NestedObjectOfStrings = { [key: string]: string | NestedObjectOfStrings };
 
-/**
- * Build styles from an object.
- */
 const internal_oclsx = <TStyles extends NestedObjectOfStrings>(
   styles: TStyles,
   enabledStyles: NestedObjectOfBoolean<TStyles>,
@@ -64,6 +61,9 @@ const internal_oclsx = <TStyles extends NestedObjectOfStrings>(
   return currentStyles;
 };
 
+/**
+ * Build styles from an object.
+ */
 export const oclsx = <TStyles extends NestedObjectOfStrings>(
   styles: TStyles,
 ): ((enabledStyles: NestedObjectOfBoolean<TStyles>) => string) => {
