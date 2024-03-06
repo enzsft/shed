@@ -1,8 +1,8 @@
 /**
  * Concatenate styles and optimise whitespace and conditionally apply styles.
  */
-export const clsx = (...classNames: (false | string | undefined | null)[]) => {
-  return classNames
+export const clsx = (...styles: (false | string | undefined | null)[]) => {
+  return styles
     .map((a) => a && a.replace(/\n/g, " ").trim().split(" ").filter(Boolean).join(" "))
     .filter(Boolean)
     .join(" ");
@@ -11,10 +11,10 @@ export const clsx = (...classNames: (false | string | undefined | null)[]) => {
 /**
  * Apply the first truthy style.
  */
-export const fclsx = (...classNames: (false | string | undefined | null)[]): string => {
-  const result = classNames.find((s) => typeof s === "string");
+export const fclsx = (...styles: (false | string | undefined | null)[]): string => {
+  const result = styles.find((s) => typeof s === "string");
 
-  return result ? result : "";
+  return result ? clsx(result) : "";
 };
 
 type NestedObjectOfBoolean<T> = {
