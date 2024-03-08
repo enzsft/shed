@@ -17,7 +17,7 @@ A shed is where you store you tools right!
 
 ## Installing packages
 
-These packages are published to the GitHub Package Registry. You can install them using `npm` or `yarn` by adding the following to your `.npmrc` or `.yarnrc` file:
+These packages are published to the GitHub Package Registry. Before installing them you need to add the following to your `.npmrc` or `.yarnrc` file:
 
 ```sh
 @enzsft:registry=https://npm.pkg.github.com
