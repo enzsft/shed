@@ -42,7 +42,9 @@ export interface RedactionOptions {
 export interface TracingContext {
   getSpanId: () => string | undefined;
   getTraceId: () => string | undefined;
-  withSpan: <TResult>(name: string, fn: () => Promise<TResult | void>) => Promise<TResult | void>;
+  // Can't get this to work with unknown type so need to use any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  withSpan: <TFn extends () => Promise<any>>(name: string, arg2: TFn) => Promise<ReturnType<TFn>>;
   addSpanData: (data: LogData) => void;
 }
 
@@ -81,7 +83,7 @@ export interface Logger {
   /**
    * Run a function within a new span
    */
-  withSpan: (name: string, fn: () => Promise<void>) => Promise<void>;
+  withSpan: TracingContext["withSpan"];
 }
 
 /**
@@ -96,10 +98,12 @@ export const createLogger = (options: LoggerOptions): Logger => {
   let tracingContext: TracingContext = {
     getTraceId: () => options.traceId ?? v4(),
     getSpanId: () => options.spanId ?? v4(),
-    withSpan: async () => {
+    withSpan: (name, fn) => {
       console.warn(
-        "Nested spans are not supported in the default tracing context. Please provide a TracingContext implementation.",
+        `New span ${name} not created. Nested spans are not supported in the default tracing context. Please provide a TracingContext implementation.`,
       );
+
+      return fn();
     },
     addSpanData: () => {},
   };
@@ -175,6 +179,6 @@ export const createLogger = (options: LoggerOptions): Logger => {
     withData,
     withTracingContext,
     withRedactions,
-    withSpan: (name: string, fn: () => Promise<void>) => tracingContext.withSpan(name, fn),
+    withSpan: (name, fn) => tracingContext.withSpan(name, fn),
   };
 };
