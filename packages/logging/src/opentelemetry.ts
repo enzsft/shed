@@ -18,7 +18,7 @@ const extractAttributes = (obj: LogData, prefix = ""): Attributes => {
       continue;
     }
 
-    if (value) {
+    if (value || value === 0 || value === false) {
       attributes[attributeKey] = value.toString();
     }
   }
@@ -30,19 +30,45 @@ const extractAttributes = (obj: LogData, prefix = ""): Attributes => {
  * Get the current OpenTelemetry tracing context
  */
 export const getOpenTelemetryTracingContext = (): TracingContext => {
-  const activeSpan = trace.getActiveSpan();
-  const spanContext = activeSpan?.spanContext();
+  const tracer = trace.getTracer("@enzsft/logger");
+
+  const getSpanContext = () => {
+    return trace.getActiveSpan()?.spanContext();
+  };
+
+  const getSpanId = (): string | undefined => {
+    return getSpanContext()?.spanId;
+  };
+
+  const getTraceId = (): string | undefined => {
+    return getSpanContext()?.traceId;
+  };
+
+  const addSpanData = (data: LogData) => {
+    const currentSpan = trace.getActiveSpan();
+
+    if (!currentSpan) {
+      return;
+    }
+
+    const attributes = extractAttributes(data);
+    currentSpan.setAttributes(attributes);
+  };
+
+  const withSpan = async <TReturn>(name: string, fn: () => Promise<TReturn>) => {
+    return tracer.startActiveSpan(name, async (span) => {
+      try {
+        return await fn();
+      } finally {
+        span.end();
+      }
+    });
+  };
 
   return {
-    traceId: spanContext?.traceId,
-    spanId: spanContext?.spanId,
-    addSpanData: (data: LogData) => {
-      if (!activeSpan) {
-        return;
-      }
-
-      const attributes = extractAttributes(data);
-      activeSpan.setAttributes(attributes);
-    },
+    getSpanId,
+    getTraceId,
+    withSpan,
+    addSpanData,
   };
 };

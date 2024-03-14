@@ -362,8 +362,8 @@ describe("withData", () => {
 
 describe("withTracingContext", () => {
   const mockTracingContext: TracingContext = {
-    spanId: "mock-span-id",
-    traceId: "mock-trace-id",
+    getSpanId: () => "mock-span-id",
+    getTraceId: () => "mock-trace-id",
     addSpanData: jest.fn(),
   };
 

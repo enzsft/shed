@@ -25,10 +25,12 @@ it("should return tracing context", () => {
   const tracingContext = getOpenTelemetryTracingContext();
 
   expect(tracingContext).toEqual({
-    traceId: "mock-trace-id",
-    spanId: "mock-span-id",
+    getTraceId: expect.any(Function),
+    getSpanId: expect.any(Function),
     addSpanData: expect.any(Function),
   });
+  expect(tracingContext.getTraceId()).toBe("mock-trace-id");
+  expect(tracingContext.getSpanId()).toBe("mock-span-id");
 });
 
 it("should set flattened attributes on active span", () => {

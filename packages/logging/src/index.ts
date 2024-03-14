@@ -40,8 +40,9 @@ export interface RedactionOptions {
 }
 
 export interface TracingContext {
-  traceId?: string;
-  spanId?: string;
+  getSpanId: () => string | undefined;
+  getTraceId: () => string | undefined;
+  withSpan: (name: string, fn: () => Promise<void>) => Promise<void>;
   addSpanData: (data: LogData) => void;
 }
 
@@ -77,6 +78,10 @@ export interface Logger {
    * Add redactions to the logger
    */
   withRedactions: (options: RedactionOptions) => void;
+  /**
+   * Run a function within a new span
+   */
+  withSpan: (name: string, fn: () => Promise<void>) => Promise<void>;
 }
 
 /**
@@ -89,8 +94,11 @@ export const createLogger = (options: LoggerOptions): Logger => {
   };
 
   let tracingContext: TracingContext = {
-    traceId: options.traceId ?? v4(),
-    spanId: options.spanId ?? v4(),
+    getTraceId: () => options.traceId ?? v4(),
+    getSpanId: () => options.spanId ?? v4(),
+    withSpan: async () => {
+      throw new Error("withSpan() not implemented in default context. Please provide a TracingContext implementation.");
+    },
     addSpanData: () => {},
   };
 
@@ -100,8 +108,8 @@ export const createLogger = (options: LoggerOptions): Logger => {
     const mergedLogPayload = merge(
       {
         ...baseLogData,
-        spanId: tracingContext.spanId,
-        traceId: tracingContext.traceId,
+        spanId: tracingContext.getSpanId(),
+        traceId: tracingContext.getTraceId(),
       },
       payload,
     );
@@ -115,7 +123,7 @@ export const createLogger = (options: LoggerOptions): Logger => {
       timestamp: Date.now(),
     };
 
-    tracingContext.addSpanData(finalPayload as LogData);
+    tracingContext.addSpanData(redactedData as LogData);
 
     console[level](JSON.stringify(finalPayload));
   };
@@ -165,5 +173,6 @@ export const createLogger = (options: LoggerOptions): Logger => {
     withData,
     withTracingContext,
     withRedactions,
+    withSpan: (name: string, fn: () => Promise<void>) => tracingContext.withSpan(name, fn),
   };
 };
