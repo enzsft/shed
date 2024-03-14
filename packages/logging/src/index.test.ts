@@ -265,6 +265,20 @@ describe("span and trace ids", () => {
   });
 });
 
+describe("withSpan", () => {
+  it("should warn about nested spans not being supported in default tracing context", () => {
+    const logger = createLogger({
+      service: "test-service",
+    });
+
+    logger.withSpan("test-span", async () => {});
+
+    expect(mockConsoleWarn).toHaveBeenCalledWith(
+      "Nested spans are not supported in the default tracing context. Please provide a TracingContext implementation.",
+    );
+  });
+});
+
 describe("withData", () => {
   it("should embelish future logs with data", () => {
     const logger = createLogger({
@@ -364,6 +378,9 @@ describe("withTracingContext", () => {
   const mockTracingContext: TracingContext = {
     getSpanId: () => "mock-span-id",
     getTraceId: () => "mock-trace-id",
+    withSpan: async (name, fn) => {
+      return fn();
+    },
     addSpanData: jest.fn(),
   };
 
@@ -399,15 +416,13 @@ describe("withTracingContext", () => {
 
     logger.info({
       message: "info 1",
+      data: {
+        foo: "bar",
+      },
     });
 
     expect(mockTracingContext.addSpanData).toHaveBeenCalledWith({
-      message: "info 1",
-      level: "info",
-      timestamp: expect.any(Number),
-      service: "test-service",
-      traceId: "mock-trace-id",
-      spanId: "mock-span-id",
+      foo: "bar",
     });
   });
 });

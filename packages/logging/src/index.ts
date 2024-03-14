@@ -42,7 +42,7 @@ export interface RedactionOptions {
 export interface TracingContext {
   getSpanId: () => string | undefined;
   getTraceId: () => string | undefined;
-  withSpan: (name: string, fn: () => Promise<void>) => Promise<void>;
+  withSpan: <TResult>(name: string, fn: () => Promise<TResult | void>) => Promise<TResult | void>;
   addSpanData: (data: LogData) => void;
 }
 
@@ -97,7 +97,9 @@ export const createLogger = (options: LoggerOptions): Logger => {
     getTraceId: () => options.traceId ?? v4(),
     getSpanId: () => options.spanId ?? v4(),
     withSpan: async () => {
-      throw new Error("withSpan() not implemented in default context. Please provide a TracingContext implementation.");
+      console.warn(
+        "Nested spans are not supported in the default tracing context. Please provide a TracingContext implementation.",
+      );
     },
     addSpanData: () => {},
   };

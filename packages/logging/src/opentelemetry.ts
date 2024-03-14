@@ -29,8 +29,8 @@ const extractAttributes = (obj: LogData, prefix = ""): Attributes => {
 /**
  * Get the current OpenTelemetry tracing context
  */
-export const getOpenTelemetryTracingContext = (): TracingContext => {
-  const tracer = trace.getTracer("@enzsft/logger");
+export const getOpenTelemetryTracingContext = (name?: string): TracingContext => {
+  const tracer = trace.getTracer(name ?? "@enzsft/logger");
 
   const getSpanContext = () => {
     return trace.getActiveSpan()?.spanContext();
