@@ -274,7 +274,7 @@ describe("withSpan", () => {
     logger.withSpan("test-span", async () => {});
 
     expect(mockConsoleWarn).toHaveBeenCalledWith(
-      "Nested spans are not supported in the default tracing context. Please provide a TracingContext implementation.",
+      `New span "test-span" not created. Nested spans are not supported in the default tracing context. Please provide a TracingContext implementation.`,
     );
   });
 });

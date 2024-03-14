@@ -55,7 +55,7 @@ export const getOpenTelemetryTracingContext = (name?: string): TracingContext =>
     currentSpan.setAttributes(attributes);
   };
 
-  const withSpan = async <TReturn>(name: string, fn: () => Promise<TReturn>) => {
+  const withSpan: TracingContext["withSpan"] = async (name, fn) => {
     return tracer.startActiveSpan(name, async (span) => {
       try {
         return await fn();

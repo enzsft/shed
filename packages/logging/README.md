@@ -158,6 +158,31 @@ const logger = createLogger({
 logger.withTracingContext(getOpenTelemetryTracingContext());
 ```
 
+You can create custom spans too and all logs executed inside the span will be attached to the new span. These spans can be nested deeply.
+
+```ts
+import { createLogger } from "@enzsft/logging";
+import { getOpenTelemetryTracingContext } from "@enzsft/logging/opentelemetry";
+
+const logger = createLogger({
+  service: "test-service",
+});
+
+logger.withTracingContext(getOpenTelemetryTracingContext());
+
+logger.withSpan("example-span", () => {
+  logger.info({
+    message: "within example-span",
+  });
+
+  logger.withSpan("nested-span", () => {
+    logger.info({
+      message: "within nested-span",
+    });
+  });
+});
+```
+
 ## Redacting data values
 
 You can redact data values from logs by providing a list of keys to redact. It will redact through nested objects and arrays too.
