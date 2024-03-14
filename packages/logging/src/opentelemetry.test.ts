@@ -6,6 +6,9 @@ jest.mock("@opentelemetry/api", () => {
 
   return {
     trace: {
+      getTracer: jest.fn(() => ({
+        startActiveSpan: jest.fn((name, fn) => fn({ end: jest.fn() })),
+      })),
       getActiveSpan: jest.fn(() => ({
         spanContext: jest.fn(() => ({
           traceId: "mock-trace-id",
@@ -21,46 +24,92 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-it("should return tracing context", () => {
+it("should return tracing context (no custom name)", async () => {
   const tracingContext = getOpenTelemetryTracingContext();
 
   expect(tracingContext).toEqual({
-    traceId: "mock-trace-id",
-    spanId: "mock-span-id",
+    getTraceId: expect.any(Function),
+    getSpanId: expect.any(Function),
     addSpanData: expect.any(Function),
+    withSpan: expect.any(Function),
+  });
+  expect(tracingContext.getTraceId()).toBe("mock-trace-id");
+  expect(tracingContext.getSpanId()).toBe("mock-span-id");
+  expect(await tracingContext.withSpan("test", () => Promise.resolve("result"))).toBe("result");
+});
+
+it("should assign the tracer the default name", () => {
+  getOpenTelemetryTracingContext();
+
+  expect(trace.getTracer).toHaveBeenCalledWith("@enzsft/logger");
+});
+
+it("should return tracing context (with custom name)", async () => {
+  getOpenTelemetryTracingContext("custom");
+
+  expect(trace.getTracer).toHaveBeenCalledWith("custom");
+});
+
+describe("getTraceId", () => {
+  it("should return trace ID", () => {
+    expect(getOpenTelemetryTracingContext().getTraceId()).toBe("mock-trace-id");
+  });
+
+  it("should return undefined if there is no active span", () => {
+    (trace.getActiveSpan as jest.Mock).mockReturnValueOnce(undefined);
+
+    expect(getOpenTelemetryTracingContext().getTraceId()).toBeUndefined();
   });
 });
 
-it("should set flattened attributes on active span", () => {
-  const tracingContext = getOpenTelemetryTracingContext();
-
-  tracingContext.addSpanData({
-    foo: "bar",
-    baz: {
-      qux: "quux",
-    },
+describe("getSpanId", () => {
+  it("should return span ID", () => {
+    expect(getOpenTelemetryTracingContext().getSpanId()).toBe("mock-span-id");
   });
 
-  expect(trace.getActiveSpan()?.setAttributes).toHaveBeenCalledWith({
-    foo: "bar",
-    "baz.qux": "quux",
+  it("should return undefined if there is no active span", () => {
+    (trace.getActiveSpan as jest.Mock).mockReturnValueOnce(undefined);
+
+    expect(getOpenTelemetryTracingContext().getSpanId()).toBeUndefined();
   });
 });
 
-it("should not set attributes if there is no active span", () => {
-  (trace.getActiveSpan as jest.Mock).mockReturnValueOnce(undefined);
+describe("addSpanData", () => {
+  it("should set flattened attributes on active span", () => {
+    const tracingContext = getOpenTelemetryTracingContext();
 
-  const tracingContext = getOpenTelemetryTracingContext();
+    tracingContext.addSpanData({
+      foo: "bar",
+      baz: {
+        qux: "quux",
+      },
+      num: 0,
+      bool: false,
+    });
 
-  tracingContext.addSpanData({});
+    expect(trace.getActiveSpan()?.setAttributes).toHaveBeenCalledWith({
+      foo: "bar",
+      "baz.qux": "quux",
+      num: "0",
+      bool: "false",
+    });
+  });
 
-  expect(trace.getActiveSpan()?.setAttributes).not.toHaveBeenCalled();
-});
+  it("should not set attributes if there is no active span", () => {
+    (trace.getActiveSpan as jest.Mock).mockReturnValueOnce(undefined);
 
-it("should handle setting no attributes", () => {
-  const tracingContext = getOpenTelemetryTracingContext();
+    const tracingContext = getOpenTelemetryTracingContext();
 
-  tracingContext.addSpanData({});
+    tracingContext.addSpanData({});
 
-  expect(trace.getActiveSpan()?.setAttributes).toHaveBeenCalledWith({});
+    expect(trace.getActiveSpan()?.setAttributes).not.toHaveBeenCalled();
+  });
+
+  it("should handle setting no attributes", () => {
+    const tracingContext = getOpenTelemetryTracingContext();
+
+    tracingContext.addSpanData({});
+
+    expect(trace.getActiveSpan()?.setAttributes).toHaveBeenCalledWith({});
+  });
 });
