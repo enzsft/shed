@@ -100,7 +100,7 @@ export const createLogger = (options: LoggerOptions): Logger => {
     getSpanId: () => options.spanId ?? v4(),
     withSpan: (name, fn) => {
       console.warn(
-        `New span ${name} not created. Nested spans are not supported in the default tracing context. Please provide a TracingContext implementation.`,
+        `New span "${name}" not created. Nested spans are not supported in the default tracing context. Please provide a TracingContext implementation.`,
       );
 
       return fn();
