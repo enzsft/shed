@@ -232,6 +232,7 @@ describe("data", () => {
       service: "test-service",
       traceId: expect.any(String),
       spanId: expect.any(String),
+      spanName: undefined,
       data: {
         foo: "bar",
         bar: "baz",
@@ -240,12 +241,13 @@ describe("data", () => {
   });
 });
 
-describe("span and trace ids", () => {
-  it("should override span and trace id", () => {
+describe("span id, span name and trace id", () => {
+  it("should override span id, span name and trace id", () => {
     const logger = createLogger({
       service: "test-service",
       traceId: "trace-id",
       spanId: "span-id",
+      spanName: "span-name",
     });
 
     logger.info({
@@ -261,6 +263,7 @@ describe("span and trace ids", () => {
       service: "test-service",
       traceId: "trace-id",
       spanId: "span-id",
+      spanName: "span-name",
     });
   });
 });
@@ -377,6 +380,7 @@ describe("withData", () => {
 describe("withTracingContext", () => {
   const mockTracingContext: TracingContext = {
     getSpanId: () => "mock-span-id",
+    getSpanName: () => "mock-span-name",
     getTraceId: () => "mock-trace-id",
     withSpan: async (name, fn) => {
       return fn();
@@ -404,6 +408,7 @@ describe("withTracingContext", () => {
       service: "test-service",
       traceId: "mock-trace-id",
       spanId: "mock-span-id",
+      spanName: "mock-span-name",
     });
   });
 

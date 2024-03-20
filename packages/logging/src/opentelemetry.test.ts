@@ -7,7 +7,14 @@ jest.mock("@opentelemetry/api", () => {
   return {
     trace: {
       getTracer: jest.fn(() => ({
-        startActiveSpan: jest.fn((name, fn) => fn({ end: jest.fn() })),
+        startActiveSpan: jest.fn((name, fn) =>
+          fn({
+            spanContext: jest.fn(() => ({
+              spanId: "mock-span-id",
+            })),
+            end: jest.fn(),
+          }),
+        ),
       })),
       getActiveSpan: jest.fn(() => ({
         spanContext: jest.fn(() => ({
@@ -30,6 +37,7 @@ it("should return tracing context (no custom name)", async () => {
   expect(tracingContext).toEqual({
     getTraceId: expect.any(Function),
     getSpanId: expect.any(Function),
+    getSpanName: expect.any(Function),
     addSpanData: expect.any(Function),
     withSpan: expect.any(Function),
   });
@@ -71,6 +79,25 @@ describe("getSpanId", () => {
     (trace.getActiveSpan as jest.Mock).mockReturnValueOnce(undefined);
 
     expect(getOpenTelemetryTracingContext().getSpanId()).toBeUndefined();
+  });
+});
+
+describe("getSpanName", () => {
+  it("should return undefined if there is no active span created by this tracing context", () => {
+    (trace.getActiveSpan as jest.Mock).mockReturnValueOnce(undefined);
+
+    expect(getOpenTelemetryTracingContext().getSpanName()).toBeUndefined();
+  });
+
+  it("should return span name when in active span created by this tracing context", async () => {
+    let spanName: string | undefined = "";
+
+    const tractingcContext = getOpenTelemetryTracingContext();
+    await tractingcContext.withSpan("mock-span-name", async () => {
+      spanName = tractingcContext.getSpanName();
+    });
+
+    expect(spanName).toBe("mock-span-name");
   });
 });
 
