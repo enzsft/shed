@@ -30,6 +30,7 @@ const extractAttributes = (obj: LogData, prefix = ""): Attributes => {
  * Get the current OpenTelemetry tracing context
  *
  * @param name The name of the tracer
+ * @returns The OpenTelemetry tracing context
  */
 export const getOpenTelemetryTracingContext = (name?: string): TracingContext => {
   const tracer = trace.getTracer(name ?? "@enzsft/logger");
