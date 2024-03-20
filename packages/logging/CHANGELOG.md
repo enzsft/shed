@@ -1,5 +1,11 @@
 # @enzsft/logging
 
+## 1.2.0
+
+### Minor Changes
+
+- 3daf256: Added span name support
+
 ## 1.1.1
 
 ### Patch Changes
