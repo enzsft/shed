@@ -1,5 +1,8 @@
 /**
  * Concatenate styles and optimise whitespace and conditionally apply styles.
+ *
+ * @param styles The styles to concatenate.
+ * @returns The concatenated styles.
  */
 export const clsx = (...styles: (false | string | undefined | null)[]) => {
   return styles
@@ -10,6 +13,9 @@ export const clsx = (...styles: (false | string | undefined | null)[]) => {
 
 /**
  * Apply the first truthy style.
+ *
+ * @param styles The styles to apply.
+ * @returns The applied style.
  */
 export const fclsx = (...styles: (false | string | undefined | null)[]): string => {
   const result = styles.find((s) => typeof s === "string");
@@ -63,6 +69,9 @@ const internal_oclsx = <TStyles extends NestedObjectOfStrings>(
 
 /**
  * Build styles from an object.
+ *
+ * @param styles The styles to build.
+ * @returns The built styles.
  */
 export const oclsx = <TStyles extends NestedObjectOfStrings>(
   styles: TStyles,
