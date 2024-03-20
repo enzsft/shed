@@ -17,12 +17,22 @@ function notEmptyObject(obj: object): boolean {
 }
 
 export interface RedactOptions {
+  /**
+   * The keys to redact from the object.
+   */
   keysToRedact: string[];
+  /**
+   * The value to replace the redacted keys with.
+   * @default "<redacted>"
+   */
   redactionValue?: string;
 }
 
 /**
  * Redact sensitive information from an object.
+ *
+ * @param object The object to redact.
+ * @param options The redaction options.
  */
 export function redact(object: Record<string, unknown>, options: RedactOptions): Record<string, unknown> {
   if (!object) {

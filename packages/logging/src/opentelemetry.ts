@@ -28,9 +28,12 @@ const extractAttributes = (obj: LogData, prefix = ""): Attributes => {
 
 /**
  * Get the current OpenTelemetry tracing context
+ *
+ * @param name The name of the tracer
  */
 export const getOpenTelemetryTracingContext = (name?: string): TracingContext => {
   const tracer = trace.getTracer(name ?? "@enzsft/logger");
+  const spanIdNameMap = new Map<string, string>();
 
   const getSpanContext = () => {
     return trace.getActiveSpan()?.spanContext();
@@ -42,6 +45,14 @@ export const getOpenTelemetryTracingContext = (name?: string): TracingContext =>
 
   const getTraceId = (): string | undefined => {
     return getSpanContext()?.traceId;
+  };
+
+  const removeSpanIdName = (spanId: string) => {
+    spanIdNameMap.delete(spanId);
+  };
+
+  const setSpanIdName = (spanId: string, name: string) => {
+    spanIdNameMap.set(spanId, name);
   };
 
   const addSpanData = (data: LogData) => {
@@ -57,16 +68,26 @@ export const getOpenTelemetryTracingContext = (name?: string): TracingContext =>
 
   const withSpan: TracingContext["withSpan"] = async (name, fn) => {
     return tracer.startActiveSpan(name, async (span) => {
+      const spanId = span.spanContext().spanId;
+      setSpanIdName(spanId, name);
+
       try {
         return await fn();
       } finally {
         span.end();
+        removeSpanIdName(spanId);
       }
     });
   };
 
+  const getSpanName = () => {
+    const spanId = getSpanId();
+    return spanId ? spanIdNameMap.get(spanId) : undefined;
+  };
+
   return {
     getSpanId,
+    getSpanName,
     getTraceId,
     withSpan,
     addSpanData,
