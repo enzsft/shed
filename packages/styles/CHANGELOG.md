@@ -1,5 +1,11 @@
 # @enzsft/styles
 
+## 1.1.2
+
+### Patch Changes
+
+- 0c10733: JSDocs improvements
+
 ## 1.1.1
 
 ### Patch Changes
